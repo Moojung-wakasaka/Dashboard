@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Zesco Electricity"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
@@ -8,29 +8,69 @@ output:
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
+library(plotly)
+df<- data.frame(read.csv("./Zesco_electricity.csv"))
+df$Year<-as.Date(df$Year)
 ```
 
-Column {data-width=650}
+Column {data-width=640}
 -----------------------------------------------------------------------
 
-### Chart A
+### Exports and Imports
 
 ```{r}
+fig<-plot_ly(df,type="scatter",mode="lines")%>%
+  add_trace(x=~Year,y=~Imports,name = "Imports",
+                    line = list(color = "red"))%>%layout(showlegend=F)%>%
+  add_trace(x=~Year,y=~Exports,name = "Exports",
+                    line = list(color = "#1f77b4"))%>%layout(showlegend=F)
+fig<-fig %>% layout(title = "Electricity Exports and Imports",
+                 yaxis = list(title = "Gigawatt-Hour"),
+                 xaxis = list(title = "Source: Energy Regulation Board"),
+                 hovermode = "compare")
+fig
 
 ```
 
-Column {data-width=350}
+Column {data-width=360}
 -----------------------------------------------------------------------
 
-### Chart B
+### Electricity Generated from Large hydro plants
 
 ```{r}
+fig1<-plot_ly(df,type="scatter",mode="lines")%>%
+  add_trace(x=~Year,y=~Large,name = "Large-Hydro",
+                    line = list(color = "blue"))%>%layout(showlegend=F)
+fig1<-fig1 %>% layout(
+                 yaxis = list(title = "Gigawatt-Hour"),
+                 xaxis = list(title = "Source: Energy Regulation Board"),
+                 hovermode = "compare")
+fig1
 
 ```
 
-### Chart C
+### Electricity Generated from Mini hydro plants
 
 ```{r}
+fig2<-plot_ly(df,type="scatter",mode="lines")%>%
+  add_trace(x=~Year,y=~Mini,name = "Mini-Hydro",
+                    line = list(color = "#3333ff"))%>%layout(showlegend=F)
+fig2<-fig2 %>% layout(
+                 yaxis = list(title = "Gigawatt-Hour"),
+                 xaxis = list(title = "Source: Energy Regulation Board"),
+                 hovermode = "compare")
+fig2
+```
 
+### Electricity Generated from Diesel plants
+```{r}
+fig<-plot_ly(df,type="scatter",mode="lines")%>%
+  add_trace(x=~Year,y=~Diesel,name = "Diesel",
+                    line = list(color = "red"))%>%layout(showlegend=F)
+fig<-fig %>% layout(
+                 yaxis = list(title = "Gigawatt-Hour"),
+                 xaxis = list(title = "Source: Energy Regulation Board"),
+                 hovermode = "compare")
+fig
 ```
 
